@@ -1,4 +1,12 @@
+using HotelListing.Configurations;
+using HotelListing.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<DatabaseContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"))
+);
 
 // Add CORS service to the container
 builder.Services.AddCors(options =>
@@ -10,6 +18,8 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader(); // Allow any headers in the request
     });
 });
+
+builder.Services.AddAutoMapper(typeof(MapperInitilizer));   
 
 // Add services to the container.
 builder.Services.AddControllers();
