@@ -1,6 +1,10 @@
 using HotelListing.Configurations;
 using HotelListing.Data;
+using HotelListing.IRepository;
+using HotelListing.Repository;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,10 +23,22 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddAutoMapper(typeof(MapperInitilizer));   
+builder.Services.AddAutoMapper(typeof(MapperInitilizer));
+  
+builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+
+builder.Services.AddControllers().AddNewtonsoftJson(op =>
+    op.SerializerSettings.ReferenceLoopHandling =
+        Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
 // Add services to the container.
+//builder.Services.AddControllers();
+
+
+// Configure JsonOptions to handle circular references and increase depth if needed
 builder.Services.AddControllers();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -35,7 +51,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-}   
+}
 
 
 app.UseHttpsRedirection();
