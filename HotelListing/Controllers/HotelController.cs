@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using HotelListing.IRepository;
 using HotelListing.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +24,7 @@ namespace HotelListing.Controllers
 
         [HttpGet]
         [ProducesResponseType(statusCode: 200)]
-        [ProducesResponseType(statusCode: 500)]
+        [ProducesResponseType(statusCode: 500)]     
 
         public async Task<IActionResult> GetHotels()
         {
@@ -41,6 +42,7 @@ namespace HotelListing.Controllers
         }
 
 
+        [Authorize]
         [HttpGet("{id:int}")]
         [ProducesResponseType(statusCode:200)]
         [ProducesResponseType(statusCode:500)]
